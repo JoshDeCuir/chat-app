@@ -29,9 +29,9 @@ const Start = ({ navigation }) => {
         <TouchableOpacity
           style={[
             styles.colorButton,
-            {backgroundColor: '#090C08', opacity: selectedColor === '#090C08' ? 1: 0.7},
+            {backgroundColor: '#003e87', opacity: selectedColor === '#003e87' ? 1: 0.7},
           ]}
-          onPress={() => handleColorSelection('090C08')}
+          onPress={() => handleColorSelection('#003e87')}
           />
         <TouchableOpacity
           style={[
@@ -55,10 +55,12 @@ const Start = ({ navigation }) => {
           onPress={() => handleColorSelection('#558a3e')}
           />
         </View>
-      <Button style={styles.button}
-        title='Start Chatting'
-        onPress={() => navigation.navigate('Screen2', { name: name })}
-      />
+      <TouchableOpacity
+        style={[styles.button, styles.buttonStartChatting]}
+        onPress={() => navigation.navigate('Screen2', { name: name, selectedColor: selectedColor })}
+      >
+        <Text style={styles.buttonText}>Start Chatting</Text>
+      </TouchableOpacity>
     </View>
       </ImageBackground>
       </View>
@@ -117,14 +119,16 @@ const styles = StyleSheet.create({
     margin: 10
   },
   buttonStartChatting: {
-    backgroundColor: '#757083',
+    backgroundColor: '#0f2101',
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginTop: 10
   },
-  button: {
-    backgroundColor: '#000000'
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center'
   },
 });
 
