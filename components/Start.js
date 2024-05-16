@@ -27,6 +27,10 @@ const Start = ({ navigation }) => {
       {/* Color selection buttons */}
       <View style={styles.colorButtonsContainer}>
         <TouchableOpacity
+          accessible={true}
+          accessibilityLabel='More options'
+          accessibilityHint='Lets you choose the background color of your chat'
+          accessibilityRole='button'
           style={[
             styles.colorButton,
             {backgroundColor: '#003e87', opacity: selectedColor === '#003e87' ? 1: 0.7},
@@ -34,6 +38,9 @@ const Start = ({ navigation }) => {
           onPress={() => handleColorSelection('#003e87')}
           />
         <TouchableOpacity
+          accessibilityLabel='More options'
+          accessibilityHint='Lets you choose the background color of your chat'
+          accessibilityRole='button'
           style={[
             styles.colorButton,
             {backgroundColor: '#43532d', opacity: selectedColor === '#43532d' ? 1: 0.7},
@@ -41,6 +48,9 @@ const Start = ({ navigation }) => {
           onPress={() => handleColorSelection('#43532d')}
           />
         <TouchableOpacity
+          accessibilityLabel='More options'
+          accessibilityHint='Lets you choose the background color of your chat'
+          accessibilityRole='button'
           style={[
             styles.colorButton,
             {backgroundColor: '#558a99', opacity: selectedColor === '#558a99' ? 1: 0.7},
@@ -48,6 +58,9 @@ const Start = ({ navigation }) => {
           onPress={() => handleColorSelection('#558a99')}
           />
         <TouchableOpacity
+          accessibilityLabel='More options'
+          accessibilityHint='Lets you choose the background color of your chat'
+          accessibilityRole='button'
           style={[
             styles.colorButton,
             {backgroundColor: '#558a3e', opacity: selectedColor === '#558a3e' ? 1: 0.7},
@@ -56,6 +69,9 @@ const Start = ({ navigation }) => {
           />
         </View>
       <TouchableOpacity
+        accessibilityLabel='More options'
+        accessibilityHint='Lets you enter the chat'
+        accessibilityRole='button'
         style={[styles.button, styles.buttonStartChatting]}
         onPress={() => navigation.navigate('Screen2', { name: name, selectedColor: selectedColor })}
       >
