@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 
@@ -35,9 +35,7 @@ const Start = ({ navigation }) => {
             onChangeText={setName}
             placeholder='Type your username here'
           />
-          {/* Text indicating color selection */}
           <Text style={styles.text1}>Choose Background Color:</Text>
-          {/* Color selection buttons */}
           <View style={styles.colorButtonsContainer}>
             {colors.map((color, index) => (
               <TouchableOpacity

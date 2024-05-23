@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from './firebase'; // Assuming you have a firebase.js file exporting your db
+import { collection, addDoc, onSnapshot, orderBy, query } from "firebase/firestore";
 
-const Chat = ({ route, navigation }) => {
+const Chat = ({ route, navigation, db }) => {
   const { name, selectedColor } = route.params;
   const [messages, setMessages] = useState([]);
 
   const onSend = (newMessages) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages));
+    newMessages.forEach(message => {
+      addDoc(collection(db, 'messages'), message);
+    });
   }
 
   const renderBubble = (props) => {
@@ -42,15 +44,17 @@ const Chat = ({ route, navigation }) => {
     });
 
     return () => unsubMessages();
-  }, [name, navigation]);
+  }, [db, name, navigation]);
 
   return (
     <View style={[styles.container, { backgroundColor: selectedColor }]}>
       <GiftedChat
         messages={messages}
         renderBubble={renderBubble}
-        onSend={onSend}
-        user={{ _id: 1 }}
+        onSend={(messages) => onSend(messages)}
+        user={{
+          _id: 1
+        }}
       />
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null}
       {Platform.OS === 'ios' ? <KeyboardAvoidingView behavior='padding' /> : null}
