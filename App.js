@@ -11,6 +11,11 @@ import { getAnalytics } from 'firebase/analytics';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+//import ignore Logs
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['AsyncStorage has been extracted from']);
+
 // Web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB1TK4LS1ys_ZmB7q6RUIEn_Y-OwwNJG5I",
