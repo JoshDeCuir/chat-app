@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity, ImageBackground, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 
 const Start = ({ navigation }) => {
   const auth = getAuth();
-  const [name, setName] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [username, setUsername] = useState('');
+  const [background, setBackground] = useState('');
   const colors = ['#003e87', '#43532d', '#558a99', '#558a3e'];
   const image = require('../background-img/background1.jpg');
-
-  const handleColorSelection = (color) => {
-    setSelectedColor(color);
-  };
 
   const signInUser = () => {
     signInAnonymously(auth)
       .then((result) => {
-        navigation.navigate('Chat', { name: name, selectedColor: selectedColor, id: result.user.uid });
+        navigation.navigate('Chat', { name: username, selectedColor: background, userID: result.user.uid });
         Alert.alert('Signed in Successfully!');
       })
       .catch((error) => {
@@ -31,31 +27,21 @@ const Start = ({ navigation }) => {
         <View style={styles.containerGrey}>
           <TextInput
             style={styles.textInput}
-            value={name}
-            onChangeText={setName}
+            value={username}
+            onChangeText={setUsername}
             placeholder='Type your username here'
           />
           <Text style={styles.text1}>Choose Background Color:</Text>
           <View style={styles.colorButtonsContainer}>
             {colors.map((color, index) => (
               <TouchableOpacity
-                accessible={true}
-                accessibilityLabel='Color Button'
-                accessibilityHint='Lets you choose the background color of your chat'
-                accessibilityRole='button'
                 key={index}
-                style={[styles.colorButton, { backgroundColor: color }, selectedColor === color && styles.selectedColor]}
-                onPress={() => handleColorSelection(color)}
+                style={[styles.colorButton, { backgroundColor: color }, background === color && styles.selectedColor]}
+                onPress={() => setBackground(color)}
               />
             ))}
           </View>
-          <TouchableOpacity
-            accessibilityLabel='More options'
-            accessibilityHint='Lets you enter the chat'
-            accessibilityRole='button'
-            style={[styles.button, styles.buttonStartChatting]}
-            onPress={() => signInUser()}
-          >
+          <TouchableOpacity style={styles.button} onPress={signInUser}>
             <Text style={styles.buttonText}>Start Chatting</Text>
           </TouchableOpacity>
         </View>
@@ -115,7 +101,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 10,
   },
-  buttonStartChatting: {
+  selectedColor: {
+    borderColor: '#c0c0c0',
+    borderWidth: 1,
+  },
+  button: {
     backgroundColor: '#0f2101',
     borderRadius: 8,
     paddingVertical: 10,
