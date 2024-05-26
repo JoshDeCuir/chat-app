@@ -106,12 +106,12 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     borderRadius: 13,
-    borderColor: '#b2b2b2',
+    borderColor: '#000000',
     borderWidth: 2,
     flex: 1,
   },
   iconText: {
-    color: '#b2b2b2',
+    color: '#000000',
     fontWeight: 'bold',
     fontSize: 10,
     backgroundColor: 'transparent',
