@@ -1,6 +1,7 @@
-**Chat App**
+<h1>**Chat App**</h1>
 
 *Objective:*
+
 Develop a mobile chat application using React Native. This app offers a chat interface with features to share images and locations. It leverages Google Firebase for storing messages, photos, and locations.
 
 *Dependencies:*
