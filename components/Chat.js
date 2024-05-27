@@ -19,7 +19,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     } else {
       Alert.alert('No internet connection', 'Messages will be sent when the connection is restored.');
     }
-  }
+  };
 
   const renderBubble = (props) => {
     return (
@@ -27,16 +27,16 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         {...props}
         wrapperStyle={{
           right: { backgroundColor: '#000' },
-          left: { backgroundColor: '#FFF' }
+          left: { backgroundColor: '#FFF' },
         }}
       />
     );
-  }
+  };
 
   const renderInputToolbar = (props) => {
     if (isConnected) return <InputToolbar {...props} />;
     else return null;
-  }
+  };
 
   const renderCustomActions = (props) => {
     return <CustomActions storage={storage} userID={userID} {...props} />;
@@ -58,7 +58,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
       );
     }
     return null;
-  }
+  };
 
   const cacheMessages = async (messagesToCache) => {
     try {

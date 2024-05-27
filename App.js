@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { Alert, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { initializeApp } from 'firebase/app';
-import { disableNetwork, enableNetwork, getFirestore } from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
-import { useNetInfo } from '@react-native-community/netinfo';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Import the screens
+// Import Firebase
+import { disableNetwork, enableNetwork, getFirestore } from 'firebase/firestore';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+
+// Import screens
 import Start from './components/Start';
 import Chat from './components/Chat';
 
@@ -30,8 +31,8 @@ const App = () => {
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app); // Initialize Firestore
-  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
   // Create the navigator
   const Stack = createNativeStackNavigator();
@@ -43,14 +44,14 @@ const App = () => {
     } else if (connectionStatus.isConnected === true) {
       enableNetwork(db);
     }
-  }, [connectionStatus.isConnected]);
+  }, [connectionStatus.isConnected, db]);
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Start'>
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name='Chat'>
-          {props => <Chat {...props} db={db} isConnected={connectionStatus.isConnected} />}
+          {props => <Chat {...props} db={db} storage={storage} isConnected={connectionStatus.isConnected} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

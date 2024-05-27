@@ -19,13 +19,14 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
       async (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            pickImage();
+            await pickImage();
             return;
           case 1:
-            takePhoto();
+            await takePhoto();
             return;
           case 2:
-            getLocation();
+            await getLocation();
+            return;
           default:
         }
       },
@@ -33,45 +34,56 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
   };
 
   const uploadAndSendImage = async (imageURI) => {
-    const uniqueRefString = generateReference(imageURI);
-    const newUploadRef = ref(storage, uniqueRefString);
-    const response = await fetch(imageURI);
-    const blob = await response.blob();
-    uploadBytes(newUploadRef, blob).then(async (snapshot) => {
-      const imageURL = await getDownloadURL(snapshot.ref);
+    try {
+      if (!imageURI) {
+        console.error("imageURI is undefined");
+        Alert.alert("Failed to upload image. Please try again.");
+        return;
+      }
+      const uniqueRefString = generateReference(imageURI);
+      const newUploadRef = ref(storage, uniqueRefString);
+      const response = await fetch(imageURI);
+      const blob = await response.blob();
+      await uploadBytes(newUploadRef, blob);
+      const imageURL = await getDownloadURL(newUploadRef);
       onSend({ image: imageURL });
-    });
+    } catch (error) {
+      console.error("Failed to upload and send image:", error);
+      Alert.alert("Failed to upload image. Please try again.");
+    }
   };
 
   const pickImage = async () => {
     let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissions?.granted) {
-      let result = await ImagePicker.launchImageLibraryAsync();
-      if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-    } else {
-      Alert.alert("Permissions haven't been granted.");
+        let result = await ImagePicker.launchImageLibraryAsync();
+        if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
+        else Alert.alert("Permissions haven't been granted")
     }
-  };
+}
 
-  const takePhoto = async () => {
-    let permissions = await ImagePicker.requestCameraPermissionsAsync();
-    if (permissions?.granted) {
+const takePhoto = async () => {
+  let permissions = await ImagePicker.requestCameraPermissionsAsync();
+  if (permissions?.granted) {
       let result = await ImagePicker.launchCameraAsync();
       if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-    } else {
-      Alert.alert("Permissions haven't been granted.");
-    }
-  };
+      else Alert.alert("Permissions haven't been granted")
+  }
+}
 
   const generateReference = (uri) => {
     const timeStamp = (new Date()).getTime();
-    const imageName = uri.split("/").pop();
+    const imageName = uri.split("/")[uri.split("/").length - 1];
     return `${userID}-${timeStamp}-${imageName}`;
   };
 
   const getLocation = async () => {
-    let permissions = await Location.requestForegroundPermissionsAsync();
-    if (permissions?.granted) {
+    try {
+      let permissions = await Location.requestForegroundPermissionsAsync();
+      if (!permissions.granted) {
+        Alert.alert("Permissions haven't been granted.");
+        return;
+      }
       const location = await Location.getCurrentPositionAsync({});
       if (location) {
         onSend({
@@ -83,8 +95,9 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
       } else {
         Alert.alert("Error occurred while fetching location");
       }
-    } else {
-      Alert.alert("Permissions haven't been granted.");
+    } catch (error) {
+      console.error("Failed to get location:", error);
+      Alert.alert("Failed to get location. Please try again.");
     }
   };
 
